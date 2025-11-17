@@ -1,12 +1,6 @@
-import express from "express";
-
-const app = express();
+import "dotenv/config";
+import app from "./src/app.js";
 const PORT = process.env.PORT || 8000;
-
-app.get("/", (req, res) => {
-  res.send("🚀 Hello from Express + Docker + EC2 CI/CD!");
-});
-
 app.listen(PORT, () => {
-  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
