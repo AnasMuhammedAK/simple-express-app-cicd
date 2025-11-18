@@ -1,14 +1,14 @@
-import userData from "../../utils/users.json" with { type: "json" };
+import { users } from "../../utils/users.js";
 
   const getUsers = async () => {
-  return await userData
+  return await users
 };
 
   const getUserData = async (id) => {
-  return await userData.find((item)=>item.id==id)
+  return await users.find((item)=>item.id==id)
 };
-const createUser =async (data={})=>{
-  const nextId = (userData.at(-1)?.id ?? 0) + 1;
+const createUser =async (data:any={})=>{
+  const nextId = (users.at(-1)?.id ?? 0) + 1;
   const newUser = {
     id: nextId,
     name: data.name ?? "Unnamed",
@@ -18,7 +18,7 @@ const createUser =async (data={})=>{
     status: data.status ?? "active",
     createdAt: new Date().toISOString().slice(0, 10),
   };
-  userData.push(newUser);
+  users.push(newUser);
   return newUser;
 }
 
