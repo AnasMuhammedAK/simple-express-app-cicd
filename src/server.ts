@@ -2,12 +2,15 @@ import express from "express";
 import cors from "cors";
 import routes from "./routes/index.js";
 import errorHandler from "./middlewares/errorHandler.js";
-import db from "./config/db.js";
+import connectMongoDB from "./config/db.js";
 import "dotenv/config";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// Connect to MongoDB
+await connectMongoDB();
 
 // Routes
 app.use("/api", routes);

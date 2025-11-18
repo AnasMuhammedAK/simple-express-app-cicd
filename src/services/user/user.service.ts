@@ -1,30 +1,30 @@
-import { users } from "../../utils/users.js";
+import UserModel, { IUser } from "../../models/user.model.js";
 
-  const getUsers = async () => {
-  return await users
+const getUsers = async (): Promise<IUser[]> => {
+  return UserModel.find()
 };
 
-  const getUserData = async (id) => {
-  return await users.find((item)=>item.id==id)
+const getUserById = async (id: string): Promise<IUser | null> => {
+  return UserModel.findById(id)
 };
-const createUser =async (data:any={})=>{
-  const nextId = (users.at(-1)?.id ?? 0) + 1;
-  const newUser = {
-    id: nextId,
-    name: data.name ?? "Unnamed",
-    email: data.email ?? "",
-    age: data.age ?? 0,
-    role: data.role ?? "user",
-    status: data.status ?? "active",
-    createdAt: new Date().toISOString().slice(0, 10),
-  };
-  users.push(newUser);
-  return newUser;
-}
 
+const createUser = async (data: Partial<IUser>): Promise<IUser> => {
+  const user = new UserModel(data);
+  return user.save();
+};
 
+const updateUser = async (id: string, data: Partial<IUser>): Promise<IUser | null> => {
+  return UserModel.findByIdAndUpdate(id, data, { new: true, runValidators: true })
+};
+
+const deleteUser = async (id: string): Promise<IUser | null> => {
+  return UserModel.findByIdAndDelete(id)
+};
 
 export default {
   getUsers,
-  getUserData,createUser
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
 };
