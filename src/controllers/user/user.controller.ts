@@ -1,9 +1,16 @@
 import { Request, Response } from "express";
 import userService from "../../services/user/user.service.js";
+import { getCache, setCache } from "../../utils/redisCache.js";
 
-export const getAllUsers = async (_req: Request, res: Response) => {
-  const users = await userService.getUsers();
-  res.json(users);
+export const getAllUsers = async (req: Request, res: Response) => {
+  const redisClient = req.app.locals.redisClient;
+  const data = await getCache(redisClient, "all-users");
+
+  if (!data?.length) {
+    const users = await userService.getUsers();
+    await setCache(redisClient, "all-users", users, 1800);
+    res.json(users);
+  } else res.json(data);
 };
 
 export const getUserData = async (req: Request, res: Response) => {
